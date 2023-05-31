@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getProductList } from './productActions';
+import { Product } from "../../../types/productTypes";
 
 interface ProductReducerState {
-    products: object[]
+    products: Product[]
     loading: 'idle' | 'pending' | 'succeeded' | 'failed',
 }
 

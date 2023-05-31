@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const getProductList = createAsyncThunk('product/getProductList', async () => {
     try {
-        const { data } = await axios.get(`https://5fc9346b2af77700165ae514.mockapi.io/products`);
+        const { data } = await axios.get(`http://localhost:4000/universe/getProducts`);
         console.log(data)
         return data;
     } catch (error: any) {
