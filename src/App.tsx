@@ -1,30 +1,45 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import "./App.css";
-import { useDispatch } from "react-redux";
 import { getProductList } from "./redux/store/products/productActions";
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
-import { Product } from "./types/productTypes";
+import { RootState, useAppDispatch } from "./redux/store";
 import ProductCard from "./components/ProductCard";
 import Pagination from "./components/Pagination";
+import Filter from "./components/Filter";
+import Basket from "./components/Basket";
 
 function App() {
-  const [page, setPage] = useState<number>(0);
-  const dispatch: any = useDispatch();
-  const { loading, products } = useSelector(
-    (state: RootState) => state.productSlice
-  );
-  const choosePage = (memoizedProducts: Product[]): any => {
-    memoizedProducts
-      .slice(page * 12, (page + 1) * 12)
-      .map((product) => <ProductCard product={product} />);
-  };
+  const dispatch = useAppDispatch();
+  const {
+    loading,
+    brandFilteredProducts,
+    defaultProducts,
+    currentPage,
+    modelFilteredProducts,
+  } = useSelector((state: RootState) => state.productSlice);
 
   useEffect(() => {
     dispatch(getProductList());
   }, []);
 
-  const memoizedProducts = useMemo(() => products, [products]);
+  const memoizedProducts = useMemo(() => defaultProducts, [defaultProducts]);
+
+  const choosePage = () => {
+    if (modelFilteredProducts.length > 0) {
+      return modelFilteredProducts
+        .slice((currentPage - 1) * 12, currentPage * 12)
+        .map((product) => <ProductCard key={product.id} product={product} />);
+    }
+    if (brandFilteredProducts.length > 0) {
+      return brandFilteredProducts
+        .slice((currentPage - 1) * 12, currentPage * 12)
+        .map((product) => <ProductCard key={product.id} product={product} />);
+    }
+
+    return memoizedProducts
+      .slice((currentPage - 1) * 12, currentPage * 12)
+      .map((product) => <ProductCard key={product.id} product={product} />);
+  };
 
   return (
     <div className="min-h-screen">
@@ -45,17 +60,14 @@ function App() {
           <h4 className="text-white font-serif">Basket</h4>
         </div>
       </nav>
-      <section className="w-full m-h-full grid grid-flow-row grid-cols-5 bg-gray-100">
-        {/* First section for modals, companies and stuff */}
-        <section className="col-span-1 "></section>
-        <section className="col-span-3  flex flex-wrap flex-row">
-          {products &&
-            memoizedProducts
-              .slice(page * 12, (page + 1) * 12)
-              .map((product) => <ProductCard product={product} />)}
+      <section className="w-full m-h-full grid grid-flow-row grid-cols-5 bg-gray-100 pt-10">
+        <Filter />
+        <section className="col-span-3 flex flex-wrap flex-row justify-evenly">
+          {choosePage()}
+
           <Pagination />
         </section>
-        <section className="col-span-1 "></section>
+        <Basket />
       </section>
     </div>
   );

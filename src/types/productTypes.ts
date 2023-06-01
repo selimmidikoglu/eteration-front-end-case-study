@@ -8,3 +8,21 @@ export interface Product {
     name: string,
     price: string,
 }
+
+export interface ProductListPayload {
+    data: any | void;
+    totalPageNumber: number,
+    models: string[],
+    brands: string[]
+
+}
+export interface ProductBrandFilteredPayload {
+    data: any | void;
+    totalPageNumber: number,
+    models: string[],
+    mapModelToProduct: object | null
+}
+export interface ProductModelFilteredPayload {
+    data: any | void;
+    totalPageNumber: number,
+}
