@@ -11,11 +11,10 @@ interface BasketReducerState {
 }
 
 
-const initialState: BasketReducerState = {
+export const initialState: BasketReducerState = {
     selectedProducts: [],
     totalPrice: 0,
 };
-console.log(initialState);
 const basketSlice = createSlice({
     name: "basket",
     initialState,
@@ -23,7 +22,6 @@ const basketSlice = createSlice({
     reducers: {
         addToBasket(state, action: PayloadAction<Product>) {
             const product = action.payload;
-            console.log(product);
             const productIndex = state.selectedProducts.findIndex((p) => p.id === parseInt(product.id));
             const productExistInCart = productIndex !== -1;
             // Checking if the product already exist in cart. If does increase if not start with 1 quantitiy.
@@ -71,7 +69,6 @@ const basketSlice = createSlice({
                 .filter((basketProduct, index) => {
                     return index !== id || basketProduct.quantity > 0;
                 });
-            console.log(basketProducts[0].quantity)
             const totalPrice = calculateTotalPrice(basketProducts);
             return {
                 ...state,

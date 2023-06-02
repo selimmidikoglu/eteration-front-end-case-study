@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Pagination from "./Pagination";
 import ProductCard from "./ProductCard";
 import { useSelector } from "react-redux";
@@ -14,34 +14,35 @@ const ProductList = (props: Props) => {
     defaultProducts,
     currentPage,
     modelFilteredProducts,
+    selectedBrand,
+    selectedSortBy,
+    selectedModel,
   } = useSelector((state: RootState) => state.productSlice);
 
-  const memoizedProducts = useMemo(() => defaultProducts, [defaultProducts]);
+  // const memoizedProducts = useMemo(() => defaultProducts, [defaultProducts]);
 
   const choosePage = () => {
-    if (modelFilteredProducts.length > 0) {
-      return modelFilteredProducts
-        .slice((currentPage - 1) * 12, currentPage * 12)
-        .map((product) => <ProductCard key={product.id} product={product} />);
-    }
-    if (brandFilteredProducts.length > 0) {
-      return brandFilteredProducts
-        .slice((currentPage - 1) * 12, currentPage * 12)
-        .map((product) => <ProductCard key={product.id} product={product} />);
+    let filteredProducts = defaultProducts;
+
+    if (selectedModel !== "") {
+      filteredProducts = modelFilteredProducts;
+    } else if (selectedBrand !== "") {
+      filteredProducts = brandFilteredProducts;
     }
 
-    return memoizedProducts
+    if (selectedSortBy !== "" && selectedBrand !== "") {
+    } else if (selectedSortBy !== "") {
+    }
+
+    return filteredProducts
       .slice((currentPage - 1) * 12, currentPage * 12)
       .map((product) => <ProductCard key={product.id} product={product} />);
   };
 
   return (
     <>
-      <section className="col-span-3 flex flex-wrap flex-row justify-evenly">
-        {choosePage()}
-
-        <Pagination />
-      </section>
+      {choosePage()}
+      <Pagination />
     </>
   );
 };

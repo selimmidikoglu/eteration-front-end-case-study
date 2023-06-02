@@ -7,12 +7,7 @@ type Props = {};
 const NavBar = (props: Props) => {
   const dispatch = useAppDispatch();
 
-  let timeoutId: any;
-  //   useEffect(() => {
-  //     dispatch(getProductList());
-  //   }, []);
-
-  const setSearchTerm = (e: any) => {
+  const setSearchTerm = (e: any, timeoutId: any) => {
     const searchTerm = e.target.value;
 
     // Clear the previous timeout if exists
@@ -20,10 +15,11 @@ const NavBar = (props: Props) => {
       clearTimeout(timeoutId);
     }
     // Set a new timeout to make the API call after 200 milliseconds
-    timeoutId = setTimeout(() => {
+    const newTimeoutId = setTimeout(() => {
       dispatch(getProductList({ name: searchTerm }));
-      timeoutId = null;
     }, 200);
+
+    return newTimeoutId;
   };
   return (
     <>

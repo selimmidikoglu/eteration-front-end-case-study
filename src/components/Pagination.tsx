@@ -7,9 +7,12 @@ type Props = {};
 
 const Pagination = (props: Props) => {
   const dispatch = useDispatch();
-  const { currentPage, totalPageNumber } = useSelector(
-    (state: RootState) => state.productSlice
-  );
+  const {
+    currentPage,
+    totalPageNumber,
+    brandCurrentPage,
+    brandFilteredTotalPageNumber,
+  } = useSelector((state: RootState) => state.productSlice);
 
   const changePage = (chosenPage: number) => {
     dispatch(setPage(chosenPage));
@@ -90,7 +93,7 @@ const Pagination = (props: Props) => {
   };
 
   return (
-    <div className="w-full h-20 flex justify-center">
+    <div className="w-full h-20 col-span-4 flex justify-center">
       <div className="w-50 flex justify-center items-center">
         {currentPage > 1 && (
           <button

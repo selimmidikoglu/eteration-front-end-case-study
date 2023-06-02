@@ -15,6 +15,15 @@ export const getProductList = createAsyncThunk('product/getProductList', async (
         return { data: null, totalPageNumber: 0, models: [], brands: [] }
     }
 });
+export const getSortByProductList = createAsyncThunk('product/getSortByProductList', async (param?: { [key: string]: string } | null) => {
+    try {
+        const data = await setURLandParams(param);
+        const totalPageNumber = getTotalPageCount(data.length);
+        return { data, totalPageNumber };
+    } catch (error: any) {
+        return { data: null, totalPageNumber: 0, models: [], brands: [] }
+    }
+});
 export const getProductById = createAsyncThunk('product/getProductById', async (param?: { [key: string]: string } | null) => {
     try {
         const data = await setURLandParams(param);
@@ -24,14 +33,10 @@ export const getProductById = createAsyncThunk('product/getProductById', async (
     }
 });
 
-export const getBrandFilteredProducts = createAsyncThunk('product/getBrandFilteredProducts', async (brand: string) => {
+export const getBrandFilteredProducts = createAsyncThunk('product/getBrandFilteredProducts', async (param?: { [key: string]: string } | null) => {
 
     try {
-        const { data } = await axios.get(`https://5fc9346b2af77700165ae514.mockapi.io/products`, {
-            params: {
-                brand: brand
-            }
-        });
+        const data = await setURLandParams(param);
         const totalPageNumber = getTotalPageCount(data.length);
         const models = retrieveModels(data);
         const mapModelToProduct = createModelProductMap(data);
@@ -103,7 +108,6 @@ export const getBrandFilteredProducts = createAsyncThunk('product/getBrandFilter
 */
 
 export const getModelFilteredProducts = createAsyncThunk('product/getModelFilteredProducts', async ({ brand, model }: { brand: string, model: string }) => {
-    console.log("Brand", brand)
     try {
         const response = await axios.get(`https://5fc9346b2af77700165ae514.mockapi.io/products`, {
             params: brand !== "" ? {
@@ -115,10 +119,9 @@ export const getModelFilteredProducts = createAsyncThunk('product/getModelFilter
         });
         const { data } = response;
         const fullUrl = response.request.responseURL;
-        console.log(data)
+        console.(data)
         const totalPageNumber = getTotalPageCount(data.length);
         data.sort()
-        console.log(fullUrl)
         return { data, totalPageNumber };
     } catch (error: any) {
         return { data: null, totalPageNumber: 0 }

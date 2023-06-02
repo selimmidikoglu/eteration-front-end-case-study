@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getBrandFilteredProducts, getModelFilteredProducts, getProductById, getProductList } from './productActions';
-import { Product, ProductListPayload, ProductBrandFilteredPayload, ProductModelFilteredPayload } from "../../../types/productTypes";
+import { getBrandFilteredProducts, getModelFilteredProducts, getProductById, getProductList, getSortByProductList } from './productActions';
+import { Product, ProductListPayload, ProductBrandFilteredPayload, ProductModelFilteredPayload, ProductSortByListPayload } from "../../../types/productTypes";
 
 interface ProductReducerState {
     defaultProducts: Product[],
@@ -10,23 +10,28 @@ interface ProductReducerState {
     loading: 'idle' | 'pending' | 'succeeded' | 'failed',
     currentPage: number,
     totalPageNumber: number,
+    brandCurrentPage: number,
+    brandTotalPageNumber: number,
     brandFilteredTotalPageNumber: number,
     modelFilteredTotalPageNumber: number,
     selectedBrand: string,
     selectedModel: string,
+    selectedSortBy: string,
     defaultModels: string[],
     models: string[],
     brands: string[],
     selectedProduct: Product | null;
 }
 
-const initialState: ProductReducerState = {
+export const initialState: ProductReducerState = {
     defaultProducts: [],
     brandFilteredProducts: [],
     modelFilteredProducts: [],
     loading: 'idle',
     currentPage: 1,
     totalPageNumber: 0,
+    brandCurrentPage: 1,
+    brandTotalPageNumber: 0,
     brandFilteredTotalPageNumber: 1,
     modelFilteredTotalPageNumber: 1,
     selectedBrand: "",
@@ -35,11 +40,12 @@ const initialState: ProductReducerState = {
     models: [],
     brands: [],
     mapModelToProduct: {},
-    selectedProduct: null
+    selectedProduct: null,
+    selectedSortBy: ""
 };
 
 
-const productSlice = createSlice({
+export const productSlice = createSlice({
     name: "product",
     initialState,
     extraReducers: (builder) => {
@@ -58,10 +64,34 @@ const productSlice = createSlice({
                     loading: 'succeeded',
                     totalPageNumber: totalPageNumber,
                     defaultModels: models,
-                    brands: brands
+                    brands: brands,
+                    currentPage: 1
                 }
             })
             .addCase(getProductList.rejected, (state) => {
+                return {
+                    ...state,
+                    loading: 'failed'
+                }
+            })
+        builder
+            .addCase(getSortByProductList.pending, (state) => {
+                return {
+                    ...state,
+                    loading: 'pending'
+                }
+            })
+            .addCase(getSortByProductList.fulfilled, (state, action) => {
+                const { data, totalPageNumber }: ProductSortByListPayload = action.payload;
+                return {
+                    ...state,
+                    defaultProducts: data,
+                    loading: 'succeeded',
+                    totalPageNumber: totalPageNumber,
+                    currentPage: 1
+                }
+            })
+            .addCase(getSortByProductList.rejected, (state) => {
                 return {
                     ...state,
                     loading: 'failed'
@@ -82,7 +112,8 @@ const productSlice = createSlice({
                     loading: 'succeeded',
                     brandFilteredTotalPageNumber: totalPageNumber,
                     models: models,
-                    mapModelToProduct: mapModelToProduct
+                    mapModelToProduct: mapModelToProduct,
+                    brandTotalPageNumber: totalPageNumber
                 }
             })
             .addCase(getBrandFilteredProducts.rejected, (state) => {
@@ -153,7 +184,8 @@ const productSlice = createSlice({
             }
             return {
                 ...state,
-                selectedBrand: action.payload
+                selectedBrand: action.payload,
+                selectedModel: ""
             };
         },
         setSelectedModel(state, action: PayloadAction<string>) {
@@ -186,11 +218,24 @@ const productSlice = createSlice({
                 modelFilteredProducts: (mapModelToProduct as { [key: string]: Product[] })[action.payload]
             };
         },
+        setSelectedSortBy(state, action: PayloadAction<string>) {
+
+            if (action.payload === "") {
+                return {
+                    ...state,
+                    selectedSortBy: ""
+                }
+            }
+            return {
+                ...state,
+                selectedSortBy: action.payload
+            };
+        },
 
     },
 });
 
 
-export const { setPage, setSelectedBrand, setSelectedModel, setProductsOfModelWithSpecificBrand } = productSlice.actions;
+export const { setPage, setSelectedBrand, setSelectedModel, setProductsOfModelWithSpecificBrand, setSelectedSortBy } = productSlice.actions;
 export default productSlice.reducer;
 

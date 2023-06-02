@@ -26,3 +26,7 @@ export interface ProductModelFilteredPayload {
     data: any | void;
     totalPageNumber: number,
 }
+export interface ProductSortByListPayload {
+    data: any | void;
+    totalPageNumber: number,
+}

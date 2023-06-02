@@ -36,15 +36,15 @@ const ProductDetailedPage = (props: Props) => {
               <img src={selectedProduct?.image} className="w-full h-full"></img>
             </div>
             <div className="xl:col-span-1 lg:col-span-1 sm:col-span-3 col-span-3 p-3">
-              <p className="my-4 text-black font-400 text-lg ">
+              <p className="text-black font-400 text-lg ">
                 {selectedProduct?.name}
               </p>
-              <p className="text-blue-600 font-500 text-lg">
+              <p className="text-blue-600 font-500 text-lg mb-20 mt-1">
                 {selectedProduct?.price} &#8378;
               </p>
 
               <button
-                className="bg-blue-600 w-full h-9 text-white rounded"
+                className="bg-blue-600 w-full h-9 text-white rounded mb-4"
                 onClick={() => addProductToBasket(selectedProduct)}
               >
                 Add to cart

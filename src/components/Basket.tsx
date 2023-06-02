@@ -9,7 +9,7 @@ const Basket = (props: Props) => {
   const { selectedProducts, totalPrice } = useSelector(
     (state: RootState) => state.basketSlice
   );
-  console.log(selectedProducts);
+
   const changeQuantityProduct = (id: number, operation: string) => {
     dispatch(changeQuantity({ id, operation }));
   };
@@ -20,15 +20,15 @@ const Basket = (props: Props) => {
         {selectedProducts &&
           selectedProducts.length > 0 &&
           selectedProducts.map((product, id) => (
-            <div className="w-full max-h-40 grid grid-cols-3 sm:grid-cols-3 p-2 mt-2">
-              <div className="product-info-container col-span-2">
+            <div className="w-full max-h-40 grid grid-cols-4 sm:grid-cols-4 p-2 mt-2">
+              <div className="product-info-container col-span-2 flex flex-col item-start justify-start">
                 <p className="product-info-name mb-1">{product.product.name}</p>
                 <p className=" product-info-price font-medium text-xs leading-4 flex items-center text-blue-600">
                   {product.product.price} &#8378;
                 </p>
               </div>
               {/* <div className="sm:col-span-1 col-span-3 quantity-changer-container"> */}
-              <div className="grid grid-cols-3 mx-auto">
+              <div className="col-span-2 grid grid-cols-3 mx-auto">
                 <button
                   className="col-span-1 flex items-center justify-center quantity-changer"
                   onClick={() => changeQuantityProduct(id, "decrease")}

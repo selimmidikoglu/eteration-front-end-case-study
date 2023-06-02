@@ -6,15 +6,14 @@ export const setURLandParams = async (param?: { [key: string]: string } | null |
 
     if (param) {
         if (!param.id) {
-            url.searchParams.set(Object.keys(param)[0], Object.values(param)[0]);
-            console.log(url.toString());
+            Object.entries(param ?? {}).map(([key, value]) => {
+                url.searchParams.set(key, value);
+            })
         } else {
             url.pathname = url.pathname + "/" + param.id;
-            console.log(url.toString());
         }
     }
 
     const { data } = await axios.get(url.toString());
-    console.log(data);
     return data;
 };

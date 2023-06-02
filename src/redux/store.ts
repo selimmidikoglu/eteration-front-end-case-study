@@ -1,4 +1,4 @@
-import { configureStore, createAsyncThunk } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import productSlice from "./store/products/productSlice";
 import basketSlice from "./store/basket/basketSlice";
 import { useDispatch } from "react-redux";
@@ -6,13 +6,12 @@ import { useDispatch } from "react-redux";
 // Load state from localStorage
 const loadState = () => {
     try {
-        const serializedState = localStorage.getItem("yourStorageKey");
+        const serializedState = localStorage.getItem("wholeState");
         if (serializedState === null) {
             return undefined;
         }
         return JSON.parse(serializedState);
     } catch (error) {
-        console.log("Error loading state from localStorage:", error);
         return undefined;
     }
 };
@@ -21,7 +20,7 @@ const loadState = () => {
 const saveState = (state: RootState) => {
     try {
         const serializedState = JSON.stringify(state);
-        localStorage.setItem("yourStorageKey", serializedState);
+        localStorage.setItem("wholeState", serializedState);
     } catch (error) {
         console.log("Error saving state to localStorage:", error);
     }
