@@ -2,17 +2,25 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { getTotalPageCount } from "../../../helpers/product/productPageNumberCreationHelpers";
 import { retrieveFilters, retrieveModels, createModelProductMap } from "../../../helpers/product/productFilterCreationHelpers";
+import { setURLandParams } from "../../../helpers/apiHelpers/productApiHelpers";
 
 
-export const getProductList = createAsyncThunk('product/getProductList', async () => {
+export const getProductList = createAsyncThunk('product/getProductList', async (param?: { [key: string]: string } | null) => {
     try {
-        const { data } = await axios.get(`http://localhost:4000/universe/getProducts`);
-        // const { data } = await axios.get(`https://5fc9346b2af77700165ae514.mockapi.io/products`);
+        const data = await setURLandParams(param);
         const totalPageNumber = getTotalPageCount(data.length);
         const { models, brands } = retrieveFilters(data);
         return { data, totalPageNumber, models, brands };
     } catch (error: any) {
         return { data: null, totalPageNumber: 0, models: [], brands: [] }
+    }
+});
+export const getProductById = createAsyncThunk('product/getProductById', async (param?: { [key: string]: string } | null) => {
+    try {
+        const data = await setURLandParams(param);
+        return { data };
+    } catch (error: any) {
+        return { data: null }
     }
 });
 
@@ -87,7 +95,11 @@ export const getBrandFilteredProducts = createAsyncThunk('product/getBrandFilter
         }
     ]
 
-    !!!! As we can see API does not work properly it brings all the Brands who has model of XC90 which means it does not take brand into consideration while searching.
+    !!!! As we can see API does not work properly it brings all the Brands which have model of XC90 which means it does not take brand into consideration while searching.
+
+    !!! One other solution would be getting model products with ids which is more beneificial solution since any variable of the products would
+    have been changed by product owner. But sending a lot of request for a lot of products does not look good. Still can be implemented in this way.
+    But I have choosen the way to create a mapping between model => product[] so, I can render specific brand && specific model products accordingly.
 */
 
 export const getModelFilteredProducts = createAsyncThunk('product/getModelFilteredProducts', async ({ brand, model }: { brand: string, model: string }) => {

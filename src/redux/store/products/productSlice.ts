@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getBrandFilteredProducts, getModelFilteredProducts, getProductList } from './productActions';
+import { getBrandFilteredProducts, getModelFilteredProducts, getProductById, getProductList } from './productActions';
 import { Product, ProductListPayload, ProductBrandFilteredPayload, ProductModelFilteredPayload } from "../../../types/productTypes";
 
 interface ProductReducerState {
@@ -17,6 +17,7 @@ interface ProductReducerState {
     defaultModels: string[],
     models: string[],
     brands: string[],
+    selectedProduct: Product | null;
 }
 
 const initialState: ProductReducerState = {
@@ -34,6 +35,7 @@ const initialState: ProductReducerState = {
     models: [],
     brands: [],
     mapModelToProduct: {},
+    selectedProduct: null
 };
 
 
@@ -111,6 +113,26 @@ const productSlice = createSlice({
                     loading: 'failed'
                 }
             })
+        builder.addCase(getProductById.pending, (state) => {
+            return {
+                ...state,
+                loading: 'pending'
+            }
+        })
+            .addCase(getProductById.fulfilled, (state, action) => {
+                const { data }: any = action.payload;
+                return {
+                    ...state,
+                    loading: 'succeeded',
+                    selectedProduct: data
+                }
+            })
+            .addCase(getProductById.rejected, (state) => {
+                return {
+                    ...state,
+                    loading: 'failed'
+                }
+            })
     },
     reducers: {
         setPage(state, action: PayloadAction<number>) {
@@ -161,7 +183,7 @@ const productSlice = createSlice({
             return {
                 ...state,
                 selectedModel: action.payload,
-                modelFilteredProducts: mapModelToProduct[action.payload]
+                modelFilteredProducts: (mapModelToProduct as { [key: string]: Product[] })[action.payload]
             };
         },
 

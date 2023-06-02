@@ -1,18 +1,26 @@
 import { Product } from "../types/productTypes";
 import "../styles/productCard.css";
 import { useAppDispatch } from "../redux/store";
-import { addProductToBasket } from "../redux/store/basket/basketSlice";
+import { addToBasket } from "../redux/store/basket/basketSlice";
+import { useNavigate } from "react-router-dom";
 type Props = {
   product: Product;
 };
 
 const ProductCard = ({ product }: Props) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const addToBasket = (product: Product) => {
-    dispatch(addProductToBasket(product));
+  const addProductToBasket = (product: Product) => {
+    dispatch(addToBasket(product));
+  };
+  const navigateProductDetail = () => {
+    navigate(`/product/${product.id}`);
   };
   return (
-    <div className="product-card-wrapper flex align-center justify-evenly flex-col p-5 bg-white m-2">
+    <div
+      className="product-card-wrapper flex align-center justify-evenly flex-col p-5 bg-white m-2"
+      onClick={navigateProductDetail}
+    >
       <img src={product.image} className="mx-4 my-3"></img>
       <p className="mx-4 text-blue-600 font-500 text-sm">
         {product.price} &#8378;
@@ -20,7 +28,7 @@ const ProductCard = ({ product }: Props) => {
       <p className="mx-4 text-black font-400 text-sm ">{product.name}</p>
       <button
         className="bg-blue-600 w-full h-9 text-white rounded"
-        onClick={() => addToBasket(product)}
+        onClick={() => addProductToBasket(product)}
       >
         Add to cart
       </button>

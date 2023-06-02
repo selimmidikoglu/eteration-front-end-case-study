@@ -13,12 +13,12 @@ import {
 
 type Props = {};
 
-const Filter = (props: Props) => {
+const Filter = ({}: Props) => {
   const { brands, selectedBrand, models, defaultModels, selectedModel } =
     useSelector((state: RootState) => state.productSlice);
   const dispatch = useAppDispatch();
 
-  const toggleBrand = (event) => {
+  const toggleBrand = (event: React.ChangeEvent<HTMLInputElement>) => {
     const brand = event.target.value;
     if (brand === selectedBrand) {
       dispatch(setSelectedBrand(""));
@@ -28,7 +28,7 @@ const Filter = (props: Props) => {
     }
   };
 
-  const toggleModel = (event) => {
+  const toggleModel = (event: React.ChangeEvent<HTMLInputElement>) => {
     const model = event.target.value;
 
     const toggleSelectedModel = (value: string) =>

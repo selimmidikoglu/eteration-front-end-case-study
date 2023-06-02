@@ -24,7 +24,7 @@
 }
 
 .product-info-price {
-    /* font-family: 'Montserrat'; */
+    font-family: 'Montserrat';
     /* font-style: normal;
     font-weight: 500;
     font-size: 10px;
@@ -32,5 +32,73 @@
     /* display: flex;
     align-items: center; */
     /* 
-    color: #2A59FE; */
+    color: #2A59FE;*/
+}
+
+.product-quantity-container {
+    width: 25px;
+    height: 25px;
+    padding: 8px 16px;
+    background: #2A59FE;
+}
+
+.quantity-changer-container {
+    width: 114px;
+    height: 38px;
+}
+
+.quantity-changer {
+    width: 36px;
+    height: 36px;
+    padding: 8px 16px;
+    background: linear-gradient(0deg,
+            rgba(255, 255, 255, 0.95),
+            rgba(255, 255, 255, 0.95)),
+        linear-gradient(0deg, rgba(42, 89, 254, 0.3), rgba(42, 89, 254, 0.3)),
+        #000000;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.product-quantity-container {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.total-price-label {
+    width: 142px;
+    height: 17px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #000000;
+}
+
+.total-price-label span {
+    color: #2A59FE;
+    font-weight: bold;
+}
+
+.checkout-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 10px;
+    width: 193px;
+    height: 30px;
+    background: #2A59FE;
+    border-radius: 4px;
 }
