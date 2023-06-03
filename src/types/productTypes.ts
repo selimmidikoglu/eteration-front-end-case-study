@@ -28,5 +28,5 @@ export interface ProductModelFilteredPayload {
 }
 export interface ProductSortByListPayload {
     data: any | void;
-    totalPageNumber: number,
+
 }

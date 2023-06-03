@@ -29,8 +29,7 @@ const ProductCard = ({ product }: Props) => {
 
   return (
     <div
-      style={{ height: 312 }}
-      className="col-span-1 flex align-center justify-evenly flex-col bg-white m-2 overflow-y-auto"
+      className=" md:h-80 h-96 col-span-1 pb-4 flex flex-col align-center justify-between bg-white mx-2 my-10 overflow-y-auto overflow-x-hidden "
       onClick={navigateProductDetail}
     >
       <div className="w-full h-fit">
@@ -39,9 +38,11 @@ const ProductCard = ({ product }: Props) => {
       <p className="mx-4 text-blue-600 font-500 text-sm">
         {product.price} &#8378;
       </p>
-      <p className="mx-4 text-black font-400 text-sm h-10">{product.name}</p>
+      <p className="mx-4 text-black font-400 sm:text-sm text-xs h-10">
+        {product.name}
+      </p>
       <button
-        className="bg-blue-600 w-full h-9 text-white rounded"
+        className="bg-blue-600  h-9 text-white text-sm rounded mx-4"
         onClick={handleButtonClick}
       >
         Add to cart

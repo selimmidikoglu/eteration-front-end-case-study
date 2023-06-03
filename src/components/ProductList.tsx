@@ -1,8 +1,11 @@
-import { useMemo } from "react";
 import Pagination from "./Pagination";
 import ProductCard from "./ProductCard";
 import { useSelector } from "react-redux";
 import { useAppDispatch, RootState } from "../redux/store";
+import { setCurrentPageAndTotalNumberOfPages } from "../redux/store/products/productSlice";
+import { getTotalPageCount } from "../helpers/product/productPageNumberCreationHelpers";
+import { useEffect, useState } from "react";
+import { Product } from "../types/productTypes";
 
 type Props = {};
 
@@ -18,31 +21,34 @@ const ProductList = (props: Props) => {
     selectedSortBy,
     selectedModel,
   } = useSelector((state: RootState) => state.productSlice);
-
-  // const memoizedProducts = useMemo(() => defaultProducts, [defaultProducts]);
-
-  const choosePage = () => {
-    let filteredProducts = defaultProducts;
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [totalPageNumber, setTotalPageNumber] = useState<number>(0);
+  const setProductList = (defaultProducts: Product[]) => {
+    let filtered = defaultProducts;
 
     if (selectedModel !== "") {
-      filteredProducts = modelFilteredProducts;
-    } else if (selectedBrand !== "") {
-      filteredProducts = brandFilteredProducts;
+      filtered = modelFilteredProducts;
+      return filtered;
     }
-
-    if (selectedSortBy !== "" && selectedBrand !== "") {
-    } else if (selectedSortBy !== "") {
+    if (selectedSortBy !== "" || selectedBrand !== "") {
+      return filtered;
     }
-
-    return filteredProducts
-      .slice((currentPage - 1) * 12, currentPage * 12)
-      .map((product) => <ProductCard key={product.id} product={product} />);
+    return filtered;
   };
+  useEffect(() => {
+    const filtered = setProductList(defaultProducts);
+    setTotalPageNumber(getTotalPageCount(filtered.length ?? 0));
+    setFilteredProducts(filtered);
+  }, [defaultProducts, modelFilteredProducts, brandFilteredProducts]);
 
   return (
     <>
-      {choosePage()}
-      <Pagination />
+      {filteredProducts
+        .slice((currentPage - 1) * 12, currentPage * 12)
+        .map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      <Pagination totalPageNumber={totalPageNumber} />
     </>
   );
 };

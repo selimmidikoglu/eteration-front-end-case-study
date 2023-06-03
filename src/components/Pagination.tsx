@@ -3,16 +3,13 @@ import { RootState } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { setPage } from "../redux/store/products/productSlice";
 
-type Props = {};
+type Props = {
+  totalPageNumber: number;
+};
 
-const Pagination = (props: Props) => {
+const Pagination = ({ totalPageNumber }: Props) => {
   const dispatch = useDispatch();
-  const {
-    currentPage,
-    totalPageNumber,
-    brandCurrentPage,
-    brandFilteredTotalPageNumber,
-  } = useSelector((state: RootState) => state.productSlice);
+  const { currentPage } = useSelector((state: RootState) => state.productSlice);
 
   const changePage = (chosenPage: number) => {
     dispatch(setPage(chosenPage));

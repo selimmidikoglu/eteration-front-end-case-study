@@ -1,5 +1,15 @@
 import { Product } from "../../types/productTypes";
-
+export const sortBy: {
+    [key: string]: {
+        order: "asc" | "desc";
+        sortBy: "createdAt" | "price";
+    };
+} = {
+    "Old to new": { order: "asc", sortBy: "createdAt" },
+    "New to old": { order: "desc", sortBy: "createdAt" },
+    "Price high to low": { order: "desc", sortBy: "price" },
+    "Price low to high": { order: "asc", sortBy: "price" },
+};
 export const retrieveFilters = (products: Product[]) => {
     const models: string[] = [];
     const brands: string[] = [];

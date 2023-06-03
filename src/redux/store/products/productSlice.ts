@@ -10,9 +10,7 @@ interface ProductReducerState {
     loading: 'idle' | 'pending' | 'succeeded' | 'failed',
     currentPage: number,
     totalPageNumber: number,
-    brandCurrentPage: number,
-    brandTotalPageNumber: number,
-    brandFilteredTotalPageNumber: number,
+    searchTerm: string,
     modelFilteredTotalPageNumber: number,
     selectedBrand: string,
     selectedModel: string,
@@ -30,10 +28,7 @@ export const initialState: ProductReducerState = {
     loading: 'idle',
     currentPage: 1,
     totalPageNumber: 0,
-    brandCurrentPage: 1,
-    brandTotalPageNumber: 0,
-    brandFilteredTotalPageNumber: 1,
-    modelFilteredTotalPageNumber: 1,
+    searchTerm: "",
     selectedBrand: "",
     selectedModel: "",
     defaultModels: [],
@@ -62,7 +57,7 @@ export const productSlice = createSlice({
                     ...state,
                     defaultProducts: data,
                     loading: 'succeeded',
-                    totalPageNumber: totalPageNumber,
+                    // totalPageNumber: totalPageNumber,
                     defaultModels: models,
                     brands: brands,
                     currentPage: 1
@@ -82,12 +77,11 @@ export const productSlice = createSlice({
                 }
             })
             .addCase(getSortByProductList.fulfilled, (state, action) => {
-                const { data, totalPageNumber }: ProductSortByListPayload = action.payload;
+                const { data }: ProductSortByListPayload = action.payload;
                 return {
                     ...state,
                     defaultProducts: data,
                     loading: 'succeeded',
-                    totalPageNumber: totalPageNumber,
                     currentPage: 1
                 }
             })
@@ -108,12 +102,13 @@ export const productSlice = createSlice({
                 const { data, totalPageNumber, models, mapModelToProduct }: ProductBrandFilteredPayload = action.payload;
                 return {
                     ...state,
-                    brandFilteredProducts: data,
+                    // brandFilteredProducts: data,
+                    defaultProducts: data,
                     loading: 'succeeded',
                     brandFilteredTotalPageNumber: totalPageNumber,
                     models: models,
                     mapModelToProduct: mapModelToProduct,
-                    brandTotalPageNumber: totalPageNumber
+                    currentPage: 1
                 }
             })
             .addCase(getBrandFilteredProducts.rejected, (state) => {
@@ -136,6 +131,7 @@ export const productSlice = createSlice({
                     modelFilteredProducts: data,
                     loading: 'succeeded',
                     modelFilteredTotalPageNumber: totalPageNumber,
+                    currentPage: 1
                 }
             })
             .addCase(getModelFilteredProducts.rejected, (state) => {
@@ -231,11 +227,24 @@ export const productSlice = createSlice({
                 selectedSortBy: action.payload
             };
         },
+        setCurrentPageAndTotalNumberOfPages(state, action: PayloadAction<number>) {
+            const totalPageNumber = action.payload
+            return {
+                ...state,
+                totalPageNumber: totalPageNumber
+            }
+        },
+        setSearchTerm(state, action: PayloadAction<string>) {
+            return {
+                ...state,
+                searchTerm: action.payload
+            };
+        },
 
     },
 });
 
 
-export const { setPage, setSelectedBrand, setSelectedModel, setProductsOfModelWithSpecificBrand, setSelectedSortBy } = productSlice.actions;
+export const { setPage, setSelectedBrand, setSelectedModel, setProductsOfModelWithSpecificBrand, setSelectedSortBy, setCurrentPageAndTotalNumberOfPages, setSearchTerm } = productSlice.actions;
 export default productSlice.reducer;
 
