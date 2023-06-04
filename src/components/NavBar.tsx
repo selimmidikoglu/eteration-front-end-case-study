@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, RootState } from "../redux/store";
 import { getProductList } from "../redux/store/products/productActions";
 import { BsBasket3Fill } from "react-icons/bs";
@@ -20,15 +20,17 @@ const toCurrency = (price: number) => {
 const NavBar = (props: Props) => {
   const dispatch = useAppDispatch();
   const totalPrice = useSelector((state: RootState) => state.basketSlice.totalPrice);
+  const [timeOutId, setTimeOutID] = useState<any>();
   const { selectedSortBy, selectedBrand } = useSelector((state: RootState) => state.productSlice);
 
-  const setSearchTermCurrent = (e: any, timeoutId: any) => {
+  const setSearchTermCurrent = (e: any) => {
     const searchTerm = e.target.value;
     dispatch(setSearchTerm(searchTerm));
     // Clear the previous timeout if exists
-    if (timeoutId) {
-      clearTimeout(timeoutId);
+    if (timeOutId) {
+      clearTimeout(timeOutId);
     }
+
     // Set a new timeout to make the API call after 200 milliseconds
 
     const newTimeoutId = setTimeout(() => {
@@ -41,8 +43,7 @@ const NavBar = (props: Props) => {
 
       dispatch(getProductList(params));
     }, 200);
-
-    return newTimeoutId;
+    setTimeOutID(newTimeoutId);
   };
   return (
     <>

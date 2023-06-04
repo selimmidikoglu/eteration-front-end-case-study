@@ -27,9 +27,7 @@ const Pagination = ({ totalPageNumber }: Props) => {
         <button
           key={1}
           onClick={() => changePage(1)}
-          className={`mx-2 w-10 h-10 text-black text-sm ${
-            1 === currentPage ? "font-bold bg-white rounded" : ""
-          }`}
+          className={`mx-2 w-10 h-10 text-black text-sm ${1 === currentPage ? "font-bold bg-white rounded" : ""}`}
         >
           {1}
         </button>
@@ -37,10 +35,7 @@ const Pagination = ({ totalPageNumber }: Props) => {
 
       if (startPage > 2) {
         pageNumbers.push(
-          <span
-            key="ellipsis-start"
-            className="mx-2 w-10 h-10 text-black text-sm"
-          >
+          <span key="ellipsis-start" className="mx-2 w-10 h-10 text-black text-sm">
             &#x2026;
           </span>
         );
@@ -52,9 +47,7 @@ const Pagination = ({ totalPageNumber }: Props) => {
         <button
           key={i}
           onClick={() => changePage(i)}
-          className={`mx-2 w-10 h-10 text-black text-sm ${
-            i === currentPage ? "font-bold bg-white rounded" : ""
-          }`}
+          className={`mx-2 w-10 h-10 text-black text-sm ${i === currentPage ? "font-bold bg-white rounded" : ""}`}
         >
           {i}
         </button>
@@ -64,10 +57,7 @@ const Pagination = ({ totalPageNumber }: Props) => {
     if (endPage < totalPageNumber) {
       if (endPage < totalPageNumber - 1) {
         pageNumbers.push(
-          <span
-            key="ellipsis-end"
-            className="mx-2 w-10 h-10 text-black text-sm"
-          >
+          <span key="ellipsis-end" className="mx-2 w-10 h-10 text-black text-sm">
             &#x2026;
           </span>
         );
@@ -77,9 +67,7 @@ const Pagination = ({ totalPageNumber }: Props) => {
         <button
           key={totalPageNumber}
           onClick={() => changePage(totalPageNumber)}
-          className={`mx-2 w-10 h-10 text-black text-sm ${
-            totalPageNumber === currentPage ? "font-bold bg-white rounded" : ""
-          }`}
+          className={`mx-2 w-10 h-10 text-black text-sm ${totalPageNumber === currentPage ? "font-bold bg-white rounded" : ""}`}
         >
           {totalPageNumber}
         </button>
@@ -91,21 +79,15 @@ const Pagination = ({ totalPageNumber }: Props) => {
 
   return (
     <div className="w-full h-20 col-span-4 flex justify-center">
-      <div className="w-50 flex justify-center items-center">
+      <div data-testid="pagination" className="w-50 flex justify-center items-center">
         {currentPage > 1 && (
-          <button
-            onClick={() => changePage(currentPage - 1)}
-            className="mx-2 w-10 h-10 text-black text-sm"
-          >
+          <button onClick={() => changePage(currentPage - 1)} className="mx-2 w-10 h-10 text-black text-sm">
             &lt;
           </button>
         )}
         {renderPageNumbers()}
         {currentPage < totalPageNumber && (
-          <button
-            onClick={() => changePage(currentPage + 1)}
-            className="mx-2 w-10 h-10 text-black text-sm"
-          >
+          <button onClick={() => changePage(currentPage + 1)} className="mx-2 w-10 h-10 text-black text-sm">
             &gt;
           </button>
         )}

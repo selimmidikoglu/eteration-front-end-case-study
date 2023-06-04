@@ -15,7 +15,7 @@ export const initialState: BasketReducerState = {
     selectedProducts: [],
     totalPrice: 0,
 };
-const basketSlice = createSlice({
+export const basketSlice = createSlice({
     name: "basket",
     initialState,
 

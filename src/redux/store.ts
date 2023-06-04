@@ -4,7 +4,7 @@ import basketSlice from "./store/basket/basketSlice";
 import { useDispatch } from "react-redux";
 
 // Load state from localStorage
-const loadState = () => {
+export const loadState = () => {
     try {
         const serializedState = localStorage.getItem("wholeState");
         if (serializedState === null) {
@@ -17,12 +17,12 @@ const loadState = () => {
 };
 
 // Save state to localStorage
-const saveState = (state: RootState) => {
+export const saveState = (state: RootState) => {
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem("wholeState", serializedState);
     } catch (error) {
-        console.log("Error saving state to localStorage:", error);
+        throw error;
     }
 };
 

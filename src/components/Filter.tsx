@@ -16,39 +16,40 @@ const Filter = ({}: Props) => {
   );
   const dispatch = useAppDispatch();
 
-  const toggleSort = (event: React.ChangeEvent<HTMLInputElement>, sortByValue: string) => {
-    const sortByChecked = event.target.value;
+  const toggleSort = (checked: boolean, sortByValue: string) => {
     let sortByStr = "";
-    if (sortByChecked === selectedSortBy) {
-      dispatch(setSelectedSortBy(""));
-    } else {
+    if (checked) {
       dispatch(setSelectedSortBy(sortByValue));
       sortByStr = sortByValue;
+    } else {
+      dispatch(setSelectedSortBy(""));
     }
     const param = {
       selectedBrand: selectedBrand,
       selectedSortBy: sortByStr,
       searchTerm: searchTerm,
     };
-    console.log(param);
-    const { params, condition } = setUrlQueryStrings(param);
+
+    const { params } = setUrlQueryStrings(param);
 
     dispatch(getSortByProductList(params));
   };
-  const toggleBrand = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let brand = event.target.value;
-    if (brand === selectedBrand) {
-      dispatch(setSelectedBrand(""));
-      brand = "";
-    } else {
+  const toggleBrand = (brand: string, checked: boolean) => {
+    let newBrand = "";
+    if (checked) {
+      newBrand = brand;
       dispatch(setSelectedBrand(brand));
+    } else {
+      dispatch(setSelectedModel(""));
+      dispatch(setSelectedBrand(""));
     }
     const param = {
-      selectedBrand: brand,
+      selectedBrand: newBrand,
       selectedSortBy: selectedSortBy,
       searchTerm: searchTerm,
     };
-    const { params, condition } = setUrlQueryStrings(param);
+
+    const { params } = setUrlQueryStrings(param);
     dispatch(getBrandFilteredProducts(params));
   };
 
@@ -78,11 +79,12 @@ const Filter = ({}: Props) => {
         <input
           checked={model === selectedModel}
           id={`radio-${model}`}
-          type="radio"
+          type="checkbox"
           value={model}
+          data-testid={`model-checkbox-${index}`}
           name="model-radio"
           className="brand-radio-button w-4 h-4 text-blue-600 bg-gray-100 border-blue-300 dark:bg-blue-700"
-          onClick={toggleModel}
+          onChange={toggleModel}
         />
         <label htmlFor={`radio-${model}`} className="brand-label md:text-sm sm:text-xs text-xs ml-2">
           {model}
@@ -95,16 +97,17 @@ const Filter = ({}: Props) => {
       <div className={styleOfFiltersDiv}>
         <h6 className="w-full text-light text-sm text-left ">Sort By</h6>
         <div className="sortby-picker-wrapper bg-white h-60">
-          {Object.keys(sortBy).map((el) => (
+          {Object.keys(sortBy).map((el, index) => (
             <div key={`sortBy-${el}`} className="flex flex-row align-middle justify-start h-6 mt-2">
               <input
                 checked={el === selectedSortBy}
                 id={`radio-${el}`}
-                type="radio"
+                type="checkbox"
                 value={el}
+                data-testid={`sortby-checkbox-${index}`}
                 name="sort-by-date-radio"
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-blue-300 dark:bg-blue-700"
-                onClick={(e) => toggleSort(e, el)}
+                onChange={(e) => toggleSort(e.target.checked, el)}
               />
               <label htmlFor={`radio-${el}`} className="brand-label md:text-sm sm:text-xs text-xs ml-2">
                 {el}
@@ -118,17 +121,19 @@ const Filter = ({}: Props) => {
         <div className="brand-picker-wrapper bg-white h-60">
           <input type="text" placeholder="Search" className="w-full rounded-sm text-sm text-white h-8 pl-2 bg-gray-200" />
           <div className="filter-box-inner">
-            {brands.map((brand) => (
+            {brands.map((brand, index) => (
               <div key={`brand-${brand}`} className="flex flex-row align-middle justify-start h-6 mt-2">
                 <input
                   checked={brand === selectedBrand}
                   id={`radio-${brand}`}
-                  type="radio"
+                  type="checkbox"
                   value={brand}
+                  data-testid={`brand-checkbox-${index}`}
                   name="brand-radio"
                   className="brand-radio-button w-4 h-4 text-blue-600 bg-gray-100 border-blue-300 dark:bg-blue-700"
-                  onClick={toggleBrand}
+                  onChange={(e) => toggleBrand(brand, e.target.checked)}
                 />
+
                 <label htmlFor={`radio-${brand}`} className="brand-label md:text-sm sm:text-xs text-xs ml-2">
                   {brand}
                 </label>

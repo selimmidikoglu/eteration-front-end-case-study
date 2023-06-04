@@ -3,9 +3,11 @@ import {
   getModelFilteredProducts,
   getProductById,
   getProductList,
+  getSortByProductList,
 } from "../../redux/store/products/productActions";
 import productSlice, {
   initialState,
+  setCurrentPageAndTotalNumberOfPages,
   setPage,
   setProductsOfModelWithSpecificBrand,
   setSelectedBrand,
@@ -27,19 +29,13 @@ describe("ProductSlice", () => {
   describe("test setSelectedBrand Reducer", () => {
     test("brand unselected", () => {
       const selectedBrand = "";
-      const afterReducerOperation = productSlice(
-        initialState,
-        setSelectedBrand(selectedBrand)
-      );
+      const afterReducerOperation = productSlice(initialState, setSelectedBrand(selectedBrand));
 
       expect(afterReducerOperation.selectedBrand).toBe("");
     });
     test("brand selected", () => {
       const selectedBrand = "Mercedes";
-      const afterReducerOperation = productSlice(
-        initialState,
-        setSelectedBrand(selectedBrand)
-      );
+      const afterReducerOperation = productSlice(initialState, setSelectedBrand(selectedBrand));
 
       expect(afterReducerOperation.selectedBrand).toBe("Mercedes");
     });
@@ -47,19 +43,13 @@ describe("ProductSlice", () => {
   describe("test setSelectedModel Reducer", () => {
     test("model unselected", () => {
       const selectedModel = "";
-      const afterReducerOperation = productSlice(
-        initialState,
-        setSelectedModel(selectedModel)
-      );
+      const afterReducerOperation = productSlice(initialState, setSelectedModel(selectedModel));
 
       expect(afterReducerOperation.selectedModel).toBe("");
     });
     test("model selected", () => {
       const selectedModel = "XC90";
-      const afterReducerOperation = productSlice(
-        initialState,
-        setSelectedModel(selectedModel)
-      );
+      const afterReducerOperation = productSlice(initialState, setSelectedModel(selectedModel));
 
       expect(afterReducerOperation.selectedModel).toBe("XC90");
     });
@@ -67,19 +57,13 @@ describe("ProductSlice", () => {
   describe("test setProductsOfModelWithSpecificBrand Reducer", () => {
     test("model unselected", () => {
       const selectedModel = "";
-      const afterReducerOperation = productSlice(
-        initialState,
-        setProductsOfModelWithSpecificBrand(selectedModel)
-      );
+      const afterReducerOperation = productSlice(initialState, setProductsOfModelWithSpecificBrand(selectedModel));
 
       expect(afterReducerOperation.selectedModel).toBe("");
     });
     test("model selected", () => {
       const selectedModel = "XC90";
-      const afterReducerOperation = productSlice(
-        initialState,
-        setProductsOfModelWithSpecificBrand(selectedModel)
-      );
+      const afterReducerOperation = productSlice(initialState, setProductsOfModelWithSpecificBrand(selectedModel));
       expect(afterReducerOperation.selectedModel).toBe("XC90");
     });
   });
@@ -174,6 +158,37 @@ describe("ProductSlice", () => {
         const afterReducerOperation = productSlice(initialState, action);
 
         expect(afterReducerOperation.loading).toBe("succeeded");
+      });
+    });
+
+    describe("getSortByProductList", () => {
+      test("pending", () => {
+        const action = { type: getSortByProductList.pending.type };
+        const afterReducerOperation = productSlice(initialState, action);
+
+        expect(afterReducerOperation.loading).toBe("pending");
+      });
+      test("failed", () => {
+        const action = { type: getSortByProductList.rejected.type };
+        const afterReducerOperation = productSlice(initialState, action);
+
+        expect(afterReducerOperation.loading).toBe("failed");
+      });
+      test("pending", () => {
+        const action = {
+          type: getSortByProductList.fulfilled.type,
+          payload: "",
+        };
+        const afterReducerOperation = productSlice(initialState, action);
+
+        expect(afterReducerOperation.loading).toBe("succeeded");
+      });
+    });
+    describe("test setCurrentPageAndTotalNumberOfPages Reducer", () => {
+      test("totalPage assigned", () => {
+        const afterReducerOperation = productSlice(initialState, setCurrentPageAndTotalNumberOfPages(2));
+
+        expect(afterReducerOperation.totalPageNumber).toBe(2);
       });
     });
   });
