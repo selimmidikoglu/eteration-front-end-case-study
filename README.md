@@ -1,5 +1,10 @@
 # eteration-front-end-case-study
 
+Basic product list, product detailed page with search functionality,
+filtering functionality,
+basket creating with selected products,
+Local stored redux state management,
+
 ## Testing 
 ```bash
 yarn run test
