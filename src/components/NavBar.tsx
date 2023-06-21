@@ -24,7 +24,8 @@ const NavBar = (props: Props) => {
   const { selectedSortBy, selectedBrand } = useSelector((state: RootState) => state.productSlice);
 
   const setSearchTermCurrent = (e: any) => {
-    const searchTerm = e.target.value;
+    const searchTerm = e.target.value.toLowerCase();
+
     dispatch(setSearchTerm(searchTerm));
     // Clear the previous timeout if exists
     if (timeOutId) {

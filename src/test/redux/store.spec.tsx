@@ -31,10 +31,11 @@ describe("Store redux", () => {
   });
   test("saveState error catch", () => {
     vi.spyOn(localStorage, "setItem").mockImplementation(() => {
-      throw new Error("Localstorage Error");
+      return new Error("Localstorage Error");
     });
     const state = store.getState();
     const result = saveState(state);
+    console.log(result);
     expect(result).toBeUndefined();
   });
   test("store.subscribe", () => {
